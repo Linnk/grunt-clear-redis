@@ -1,6 +1,6 @@
 /*
- * grunt-redis-cache
- * https://github.com/linnk/grunt-redis-cache
+ * grunt-clear-redis
+ * https://github.com/linnk/grunt-clear-redis
  *
  * Copyright (c) 2015 Juan I. Benavides
  * Licensed under the MIT license.
@@ -29,13 +29,9 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    redis_cache: {
+    clear_redis: {
       default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
+		  keys: ['incrementacrm_cache_*'],
       },
       custom_options: {
         options: {
@@ -65,7 +61,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'redis_cache', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'clear_redis', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

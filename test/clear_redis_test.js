@@ -22,7 +22,7 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
-exports.redis_cache = {
+exports.clear_redis = {
   setUp: function(done) {
     // setup here if necessary
     done();
