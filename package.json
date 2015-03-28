@@ -1,0 +1,45 @@
+{
+  "name": "grunt-redis-cache",
+  "description": "A Grunt plugin to delete keys and databases from redis automatically. Useful when using redis as a cache engine.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/linnk/grunt-redis-cache",
+  "author": {
+    "name": "Juan I. Benavides",
+    "email": "juan@lionwriter.com",
+    "url": "http://lionwriter.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/linnk/grunt-redis-cache.git"
+  },
+  "bugs": {
+    "url": "https://github.com/linnk/grunt-redis-cache/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/linnk/grunt-redis-cache/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.9.2",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt": "~0.4.5"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "redis": "^0.12.1"
+  }
+}
