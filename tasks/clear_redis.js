@@ -6,10 +6,9 @@
  * Licensed under the MIT license.
  */
 
-var redis = require('redis');
-var client = redis.createClient();
-
 'use strict';
+
+var redis = require('redis');
 
 module.exports = function(grunt) {
 
@@ -17,42 +16,51 @@ module.exports = function(grunt) {
 
 		var done = this.async();
 
-		var options = this.options({
-			verbose: false,
-		});
-
 		if (!this.data.keys)
-			this.data.keys = [];
-
-		grunt.log.writeln(this.data);
-		console.log(this.data);
-
-		client.on('error', function(err) {
-			console.log('Redis.on error: ' + err);
-		});
-
-		var callbacks_left = 3;
-		var delete_keys = function(err, keys)
 		{
-			for (var n = 0; n < keys.length; n++)
-			{
-				client.del(keys[n]);
-			}
-
-			grunt.log.writeln('Deleted ' + keys.length + ' keys.');
-
-			if ((--callbacks_left) === 0)
-			{
-				client.quit();
-				done();
-			}
+			this.data.keys = [];
 		}
 
-		grunt.log.writeln('Deleting ' + config.prefix + '* keys.');
+		if (this.data.keys.length === 0)
+		{
+			grunt.log.writeln('No keys provided for clear-redis.');
 
-		client.keys(config.prefix + 'cake_core_*', delete_keys);
-		client.keys(config.prefix + 'cake_model_*', delete_keys);
-		client.keys(config.prefix + 'cache_*', delete_keys);
+			return done();
+		}
+
+		var client = redis.createClient();
+
+		client.on('error', function(err) {
+			grunt.warn('Redis client, error: ' + err);
+		});
+
+		grunt.log.writeln('Deleting keys...');
+
+		var callbacks_left = this.data.keys.length;
+
+		var delete_keys = function(key_pattern)
+		{
+			client.keys(key_pattern, function(err, keys){
+				for (var n = 0; n < keys.length; n++)
+				{
+					grunt.verbose.writeln('Deleting: ' + keys[n]);
+					client.del(keys[n]);
+				}
+
+				grunt.log.ok('Deleted ' + keys.length + ' keys on pattern: ' + key_pattern);
+
+				if ((--callbacks_left) === 0)
+				{
+					client.quit();
+					done();
+				}
+			});
+		};
+
+		for (var i = 0; i < this.data.keys.length; i++)
+		{
+			delete_keys(this.data.keys[i]);
+		}
 	});
 
 };
