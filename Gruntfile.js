@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 
 		// Configuration to be run (and then tested).
 		clear_redis: {
-			default_options: {
+			development: {
 				keys: [
 					'incrementacrm_cake_core_*',
 					'incrementacrm_cake_model_*',
