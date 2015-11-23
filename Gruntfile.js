@@ -36,6 +36,12 @@ module.exports = function(grunt) {
 					'incrementacrm_cake_model_*',
 					'incrementacrm_cache_*',
 				],
+			},
+			another: {
+				database: 1,
+				keys: [
+					'lol',
+				],
 			}
 		},
 
