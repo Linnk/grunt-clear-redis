@@ -10,13 +10,17 @@
 
 var redis = require('redis');
 
-module.exports = function(grunt) {
-
-	grunt.registerMultiTask('clear_redis', 'Grunt plugin to delete keys in Redis automatically.', function() {
-
+module.exports = function(grunt)
+{
+	grunt.registerMultiTask('clear_redis', 'Grunt plugin to delete keys in Redis automatically.', function(){
 		var done = this.async();
 
-		if (!this.data.keys)
+		if (isNaN(this.data.database))
+		{
+			this.data.database = 0;
+		}
+
+		if (this.data.keys.constructor !== Array)
 		{
 			this.data.keys = [];
 		}
@@ -28,15 +32,26 @@ module.exports = function(grunt) {
 			return done();
 		}
 
+		var db_prefix = this.data.database === 0 ? '' : 'DB[' + this.data.database + '] ';
+		var total_keys = this.data.keys.length;
+
 		var client = redis.createClient();
+
+		grunt.verbose.writeln('Selecting database: ' + this.data.database);
+
+		client.select(this.data.database, function() {
+			grunt.log.writeln('Deleting keys...');
+
+			for (var i = 0; i < this.data.keys.length; i++)
+			{
+				delete_keys(this.data.keys[i]);
+			}
+		}.bind(this));
 
 		client.on('error', function(err) {
 			grunt.warn('Redis client, error: ' + err);
+			throw err;
 		});
-
-		grunt.log.writeln('Deleting keys...');
-
-		var callbacks_left = this.data.keys.length;
 
 		var delete_keys = function(key_pattern)
 		{
@@ -47,20 +62,14 @@ module.exports = function(grunt) {
 					client.del(keys[n]);
 				}
 
-				grunt.log.ok('Deleted ' + keys.length + ' keys on pattern: ' + key_pattern);
+				grunt.log.ok(db_prefix + 'Deleted ' + keys.length + ' keys on pattern: ' + key_pattern);
 
-				if ((--callbacks_left) === 0)
+				if ((--total_keys) === 0)
 				{
 					client.quit();
 					done();
 				}
 			});
-		};
-
-		for (var i = 0; i < this.data.keys.length; i++)
-		{
-			delete_keys(this.data.keys[i]);
 		}
 	});
-
-};
+}

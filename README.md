@@ -32,6 +32,14 @@ grunt.initConfig({
 				'cakephp_cache_*',
 			],
 		}
+		production: {
+			database: 1,
+			keys: [
+				'cakephp_cake_core_*',
+				'cakephp_cake_model_*',
+				'cakephp_cache_*',
+			],
+		}
 	},
 
 });
