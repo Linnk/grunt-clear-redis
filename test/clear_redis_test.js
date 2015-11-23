@@ -1,51 +1,62 @@
 'use strict';
 
 var grunt = require('grunt');
-
-/*
-  ======== A Handy Little Nodeunit Reference ========
-  https://github.com/caolan/nodeunit
-
-  Test methods:
-    test.expect(numAssertions)
-    test.done()
-  Test assertions:
-    test.ok(value, [message])
-    test.equal(actual, expected, [message])
-    test.notEqual(actual, expected, [message])
-    test.deepEqual(actual, expected, [message])
-    test.notDeepEqual(actual, expected, [message])
-    test.strictEqual(actual, expected, [message])
-    test.notStrictEqual(actual, expected, [message])
-    test.throws(block, [error], [message])
-    test.doesNotThrow(block, [error], [message])
-    test.ifError(value)
-*/
+var redis = require('redis');
+var async = require('async');
 
 exports.clear_redis = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  // development: function(test) {
-  //   test.expect(1);
-  // 
-  // 	console.log('====================================');
-  // 	console.log(grunt);
-  // 	console.log('====================================');
-  //   var actual = grunt.file.read('tmp/default_options');
-  //   var expected = grunt.file.read('test/expected/default_options');
-  //   test.equal(actual, expected, 'should describe what the default behavior is.');
-  // 
-  //   test.done();
-  // },
-  // production: function(test) {
-  //   test.expect(1);
-  // 
-  //   var actual = grunt.file.read('tmp/custom_options');
-  //   var expected = grunt.file.read('test/expected/custom_options');
-  //   test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-  // 
-  //   test.done();
-  // },
+	setUp: function(done) {
+		done();
+	},
+	development: function(test) {
+		var client = redis.createClient();
+
+		test.expect(4);
+		async.parallel(
+			[
+				function(callback){
+					client.get('cakephp_core_grunt_test', function (err, value){
+						if (err) {
+							throw err;
+						}
+						test.equal(value, null, 'the value should be null');
+						callback();
+					});
+				},
+				function(callback){
+					client.get('cakephp_model_grunt_test', function (err, value){
+						if (err) {
+							throw err;
+						}
+						test.equal(value, null, 'the value should be null');
+						callback();
+					});
+				},
+				function(callback){
+					client.get('cache_grunt_test', function (err, value){
+						if (err) {
+							throw err;
+						}
+						test.equal(value, null, 'the value should be null');
+						callback();
+					});
+				},
+				function(callback){
+					client.select(1, function(){
+						client.get('session_grunt_test', function (err, value){
+							if (err) {
+								throw err;
+							}
+							test.equal(value, null, 'the value should be null');
+							callback();
+						});
+					});
+				}
+			],
+			function(err, results) {
+				test.done();
+				client.quit();
+			}
+		);
+	}
 };

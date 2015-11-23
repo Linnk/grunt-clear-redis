@@ -32,15 +32,15 @@ module.exports = function(grunt) {
 		clear_redis: {
 			development: {
 				keys: [
-					'incrementacrm_cake_core_*',
-					'incrementacrm_cake_model_*',
-					'incrementacrm_cache_*',
+					'cakephp_core_*',
+					'cakephp_model_*',
+					'cache_*',
 				],
 			},
 			another: {
 				database: 1,
 				keys: [
-					'lol',
+					'session_*',
 				],
 			}
 		},
