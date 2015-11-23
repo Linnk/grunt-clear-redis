@@ -15,12 +15,7 @@
   "bugs": {
     "url": "https://github.com/linnk/grunt-clear-redis/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/linnk/grunt-clear-redis/blob/master/LICENSE-MIT"
-    }
-  ],
+  "license": "MIT",
   "engines": {
     "node": ">= 0.8.0"
   },
