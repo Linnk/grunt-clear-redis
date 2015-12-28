@@ -31,6 +31,11 @@ module.exports = function(grunt) {
 		// Configuration to be run (and then tested).
 		clear_redis: {
 			development: {
+				options: {
+					port: 6379,
+					host: '127.0.0.1',
+					auth_pass: null
+				},
 				keys: [
 					'cakephp_core_*',
 					'cakephp_model_*',
