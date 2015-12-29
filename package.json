@@ -1,7 +1,7 @@
 {
   "name": "grunt-clear-redis",
   "description": "A Grunt plugin to delete keys from your redis database, automatically. Useful when using redis as a cache engine.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/linnk/grunt-clear-redis",
   "author": {
     "name": "Juan I. Benavides",

@@ -32,14 +32,11 @@ module.exports = function(grunt)
 			return done();
 		}
 
-		this.port = this.data.options.port || '6379';
-		this.host = this.data.options.host || 'localhost';
-		this.auth_pass = this.data.options.auth_pass;
-
 		var db_prefix = this.data.database === 0 ? '' : 'DB[' + this.data.database + '] ';
 		var total_keys = this.data.keys.length;
 
-		var client = redis.createClient(this.port, this.host, { auth_pass: this.data.options.auth_pass });
+		var options = this.data.options instanceof Object ? this.data.options : {};
+		var client = redis.createClient(options);
 
 		grunt.verbose.writeln('Selecting database: ' + this.data.database);
 

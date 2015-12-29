@@ -33,19 +33,29 @@ grunt.initConfig({
 			],
 		}
 		production: {
-			database: 1,
 			keys: [
 				'cakephp_cake_core_*',
 				'cakephp_cake_model_*',
 				'cakephp_cache_*',
 			],
+			database: 1,
+			options: {
+				port: 6379,
+				host: '127.0.0.1',
+			},
 		}
 	},
 
 });
 ```
 
+### Task's parameters.
+* `keys:` An array object with the key patterns you want to delete.
+* `database`: *(optional)* Select the database in which you want to perform the task. *Default: 0*
+* `options`: *(optional)* Arguments for the actual [redis.createClient()](https://www.npmjs.com/package/redis). *Default: {port: 6370, host: '127.0.0.1'}*
+
 And that's all.
+
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
