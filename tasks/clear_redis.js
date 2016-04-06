@@ -8,10 +8,10 @@
 
 'use strict';
 
-var redis = require('redis');
-
 module.exports = function(grunt)
 {
+	var redis = require('redis');
+
 	grunt.registerMultiTask('clear_redis', 'Grunt plugin to delete keys in Redis automatically.', function(){
 		var done = this.async();
 
@@ -40,21 +40,7 @@ module.exports = function(grunt)
 
 		grunt.verbose.writeln('Selecting database: ' + this.data.database);
 
-		client.select(this.data.database, function() {
-			grunt.log.writeln('Deleting keys...');
-
-			for (var i = 0; i < this.data.keys.length; i++)
-			{
-				delete_keys(this.data.keys[i]);
-			}
-		}.bind(this));
-
-		client.on('error', function(err) {
-			grunt.warn('Redis client, error: ' + err);
-			throw err;
-		});
-
-		var delete_keys = function(key_pattern)
+		var delete_keys = function delete_keys(key_pattern)
 		{
 			client.keys(key_pattern, function(err, keys){
 				for (var n = 0; n < keys.length; n++)
@@ -72,5 +58,19 @@ module.exports = function(grunt)
 				}
 			});
 		};
+
+		client.select(this.data.database, function() {
+			grunt.log.writeln('Deleting keys...');
+
+			for (var i = 0; i < this.data.keys.length; i++)
+			{
+				delete_keys(this.data.keys[i]);
+			}
+		}.bind(this));
+
+		client.on('error', function(err) {
+			grunt.warn('Redis client, error: ' + err);
+			throw err;
+		});
 	});
 };
