@@ -32,7 +32,11 @@
     "grunt": "~1.0.0"
   },
   "keywords": [
-    "gruntplugin redis clear flush cache"
+    "gruntplugin",
+    "redis",
+    "clear redis",
+    "flush",
+    "cache"
   ],
   "dependencies": {
     "async": "^2.0.0-rc.2",
